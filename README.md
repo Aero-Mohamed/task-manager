@@ -23,6 +23,17 @@
 
 ---
 
+## Feature Implemented
+- User Authentication (Login & Registration)
+- Filament Admin Panel
+  - Manage Users & Tasks
+  - Manage Roles & Permissions
+  
+- Users Blade Dashboard
+  - List users' Tasks
+  - Add/Update Tasks
+
+---
 ## Code Quality
 
 - Static Code Analysis (PHP Stan + LaraStan) - Testing for potential errors.
@@ -30,4 +41,3 @@
 - Php Code Sniffer - Testing for Common Standard for code writing style.
     - Detect Problems `./vendor/bin/phpcs -n --standard=PSR12 app`
     - Fix Problems `./vendor/bin/phpcbf --standard=PSR12 app`
-
