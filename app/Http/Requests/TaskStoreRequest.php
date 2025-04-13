@@ -15,18 +15,16 @@ class TaskStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-
-
         /** @var User $user */
         $user = $this->user();
 
         $task = $this->route('task');
 
         if ($task instanceof Task) {
-            return $user && $user->can('update', $task);
+            return $user->can('update', $task);
         }
 
-        return $user && $user->can('create', Task::class);
+        return $user->can('create', Task::class);
     }
 
     /**
