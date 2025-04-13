@@ -20,7 +20,12 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return self::$model::query()->count();
+    }
 
     public static function form(Form $form): Form
     {
@@ -73,6 +78,10 @@ class UserResource extends Resource
                     ->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('tasks_count')
+                    ->counts('tasks')
+                    ->label('Total Tasks')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label('Roles')
                     ->badge(),

@@ -7,6 +7,8 @@
 - `php artisan key:generate`
 - `chmod -R 777 storage bootstrap/cache`
 - `php artisan migrate:fresh --seed --force`
+- `npm install`
+- `npm run build`
 
 ---
 ### Seeded Credentials

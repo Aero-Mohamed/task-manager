@@ -2,24 +2,26 @@
 
 namespace App\Policies;
 
+use App\Models\Task;
 use App\Models\User;
 
-class UserPolicy
+class TaskPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_user');
+        return $user->can('view_any_task');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $targetUser): bool
+    public function view(User $user, Task $task): bool
     {
-        return $user->can('view_user') || $this->viewAny($user);
+        return $this->viewAny($user) ||
+            ($user->can('view_task') && $task->getAttribute('user_id') == $user->getKey());
     }
 
     /**
@@ -27,24 +29,24 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_user');
+        return $user->can('create_task');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $targetUser): bool
+    public function update(User $user, Task $task): bool
     {
-        return $user->can('update_user');
+        return $user->can('update_task') && $task->getAttribute('user_id') == $user->getKey();
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $targetUser): bool
+    public function delete(User $user, Task $task): bool
     {
-        return !$targetUser->hasRole(['Super Admin'])
-            && ($user->can('delete_user') || $this->deleteAny($user));
+        return ($user->can('delete_task') && $task->getAttribute('user_id') == $user->getKey())
+            || $this->deleteAny($user);
     }
 
     /**
@@ -55,15 +57,15 @@ class UserPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_user');
+        return $user->can('delete_any_task');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $targetUser): bool
+    public function forceDelete(User $user, Task $task): bool
     {
-        return $user->can('force_delete_user') || $this->forceDeleteAny($user);
+        return $user->can('force_delete_task') || $this->forceDeleteAny($user);
     }
 
     /**
@@ -74,15 +76,16 @@ class UserPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_user');
+        return $user->can('force_delete_any_task');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $targetUser): bool
+    public function restore(User $user, Task $task): bool
     {
-        return $user->can('restore_user') || $this->restoreAny($user);
+        return ($user->can('restore_task') && $task->getAttribute('user_id') == $user->getKey())
+            || $this->restoreAny($user);
     }
 
     /**
@@ -93,6 +96,6 @@ class UserPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_user');
+        return $user->can('restore_any_task');
     }
 }

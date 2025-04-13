@@ -60,5 +60,10 @@ class RolePermissionSeeder extends Seeder
         /** @var Role $adminRole */
         $adminRole = Role::findByName('Super Admin');
         $adminRole->syncPermissions(Permission::all());
+
+        $userRole = Role::findByName('User');
+        $userRole->syncPermissions(
+            Permission::query()->where('name', 'like', '%task%')->get()
+        );
     }
 }
